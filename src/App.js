@@ -1,5 +1,7 @@
-import Layout from  "./Layout/layout";
+import Layout from  "./Layout/Layout";
 import { useState } from 'react';
+import Signup from './Pages/Signup/Signup';
+import { Route, Switch } from 'react-router-dom';
 
 function App() {
   const [isAuth, setIsAuth] = useState(false);
@@ -20,7 +22,9 @@ function App() {
       handleLogin={handleLogin}
       handleSignOut={handleSignOut}
     > 
-      <h1>Hello</h1>
+      <Switch>
+        <Route path="/signup" exact component={Signup} />
+      </Switch>
     </Layout>
   );
 }

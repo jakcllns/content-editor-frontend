@@ -22,6 +22,8 @@ const useStyles = makeStyles(theme => ({
     },
     toolbar: {
         flexWrap: 'wrap',
+        marginRight: theme.spacing(4),
+        marginLeft: theme.spacing(4)
     },
     toolbarTitle: {
         flexGrow: 1,
