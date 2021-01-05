@@ -8,7 +8,10 @@ import {
     Link,
     Grid,
     Typography,
-    Container
+    Container,
+    Box,
+    IconButton,
+    CircularProgress
 } from  "@material-ui/core"
 import { LockOutlined } from "@material-ui/icons";
 import { useState } from "react";
@@ -43,7 +46,15 @@ const useStyles = makeStyles(theme => ({
     error: {
         marginTop: theme.spacing(3),
         fontWeight: 'bold'
-    }
+    },
+    buttonProgress: {
+        color: theme.palette.secondary.main,
+        position: 'absolute',
+        top: '50%',
+        left: '50%',
+        marginTop: -12,
+        marginLeft: -12,
+    },
 }))
 
 const Signup = props => {
@@ -57,7 +68,9 @@ const Signup = props => {
         email: null,
         password: null,
         twoFactor: false
-    })
+    });
+    const [loading, setLoading] = useState(false);
+
 
     const handleChange = event => {
         event.preventDefault();
@@ -66,48 +79,48 @@ const Signup = props => {
         const passwordRegEx = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/
 
         const newFormData = {...formData};
-        newFormData[name] = name === 'twoFactor' ? checked :value;
-        setFormData(newFormData);
+            newFormData[name] = name === 'twoFactor' ? checked :value;
+            setFormData(newFormData);
 
-        switch(name){
-            case 'firstName':
-                error.message = value.length < 2 ? 
-                    'First name must be at least 2 characters long.' : 
-                    '';
-                error.origin = name;
-                break;
-            case 'lastName':
-                error.message = value.length < 2 ?
-                    'Last name must be at least 2 characters long.' :
-                    '';
-                error.origin = name;
-                break;
-            case 'password':
-                error.message = !passwordRegEx.test(value) ?
-                    'Password must be at least 8 characters long, contain ' + 
-                    'one lowercase letter, one uppercase letter and one ' +
-                    'special character.' :
-                    '';
-                error.origin = name;
-                break;
-            case 'confirmPassword':
-                error.message = formData.password !== value ?
-                    'Must match the password you provided.' :
-                    '';
-                error.origin = name
-                break;
-            default: 
-                break;
+            switch(name){
+                case 'firstName':
+                    error.message = value.length < 2 ? 
+                        'First name must be at least 2 characters long.' : 
+                        '';
+                    error.origin = name;
+                    break;
+                case 'lastName':
+                    error.message = value.length < 2 ?
+                        'Last name must be at least 2 characters long.' :
+                        '';
+                    error.origin = name;
+                    break;
+                case 'password':
+                    error.message = !passwordRegEx.test(value) ?
+                        'Password must be at least 8 characters long, contain ' + 
+                        'one lowercase letter, one uppercase letter and one ' +
+                        'special character.' :
+                        '';
+                    error.origin = name;
+                    break;
+                case 'confirmPassword':
+                    error.message = formData.password !== value ?
+                        'Must match the password you provided.' :
+                        '';
+                    error.origin = name
+                    break;
+                default: 
+                    break;
+            }
+            if(error.message.length > 0){
+            return catchError(error);
+            }
+            setError([...errors.filter(e => e.origin !== name)]);
         }
-        if(error.message.length > 0){
-           return catchError(error);
-        }
-        setError([...errors.filter(e => e.origin !== name)]);
-    }
 
     const handleSubmit = event => {
         event.preventDefault();
-        const elements = event.target.elements;
+        setLoading(true);
 
         const graphqlQuery = {
             query: `
@@ -269,10 +282,18 @@ const Signup = props => {
                         variant="contained"
                         className={classes.submit}
                         fullWidth
-                        disabled={errors.some(e => e.origin !== 'server')}
+                        disabled={errors.some(e => e.origin !== 'server') || loading}
                     >
                         Sign Up
+                        {
+                            loading && 
+                            <CircularProgress 
+                                size={24} 
+                                className={classes.buttonProgress} 
+                            />
+                        }
                     </Button>
+                        
                     <Typography color="error" align="center" variant="body2" className={classes.error}>
                         {
                             errors.some(e => e.origin === 'server') ? 
