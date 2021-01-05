@@ -9,8 +9,6 @@ import {
     Grid,
     Typography,
     Container,
-    Box,
-    IconButton,
     CircularProgress
 } from  "@material-ui/core"
 import { LockOutlined } from "@material-ui/icons";
@@ -58,7 +56,6 @@ const useStyles = makeStyles(theme => ({
 }))
 
 const Signup = props => {
-    //need to add in loading element
     //Look into adding recaptcha
     const classes = useStyles();
     const [errors, setError] = useState([]);
