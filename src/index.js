@@ -9,11 +9,11 @@ import AuthContextProvider from  './context/auth-context';
 
 ReactDOM.render(
   <AuthContextProvider>
-    <React.StrictMode>
+    
       <BrowserRouter >
         <App />
       </BrowserRouter>
-    </React.StrictMode>
+    
   </AuthContextProvider>,
   document.getElementById('root')
 );

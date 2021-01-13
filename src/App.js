@@ -8,6 +8,7 @@ import { AuthContext } from './context/auth-context';
 function App() {
   const authContext = useContext(AuthContext);
 
+  
   return (
     <Layout 
       isAuth={authContext.jwt}

@@ -81,6 +81,7 @@ const Nav = props => {
                 </Button>
             }
             <IconButton
+                ref={state.anchorElement}
                 aria-label="current user account"
                 aria-controls="menu-appbar"
                 aria-haspopup="true"
@@ -95,6 +96,7 @@ const Nav = props => {
             
                 {auth && (
                     <Menu
+                        
                         getContentAnchorEl={null}
                         id="menu-appbar"                        
                         elevation={0}
@@ -108,6 +110,7 @@ const Nav = props => {
                             horizontal: 'center'
                         }}
                         anchorEl={state.anchorElement}
+                        keepMounted
                         open={state.open}
                     >
                         <MenuItem>Profile</MenuItem>
@@ -132,6 +135,7 @@ const Nav = props => {
                             horizontal: 'center'
                         }}
                         anchorEl={state.anchorElement}
+                        keepMounted
                         open={state.open}
                     >
                         <MenuItem component="button" >

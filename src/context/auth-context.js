@@ -28,6 +28,7 @@ const AuthContextProvider = props => {
         console.log(props.history)
     }
 
+    
     return (
         <AuthContext.Provider
             value={{login: loginHandler, jwt: authToken, expiration: expiresIn, signout: signoutHandler}}
