@@ -40,6 +40,7 @@ const NavBar = props => {
                     onSignOut={props.onSignOut}
                     onLogin={props.onLogin}
                     isMobile={false}
+                    authToken={props.authToken}
                 />
             </Toolbar>
         </AppBar>

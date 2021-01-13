@@ -70,7 +70,7 @@ const Signup = props => {
 
 
     const handleChange = event => {
-        event.preventDefault();
+        // event.preventDefault();
         const { name, value, checked } = event.target;
         const error = {message: '', origin: ''};
         const passwordRegEx = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/
@@ -300,7 +300,7 @@ const Signup = props => {
                     </Typography>
                     <Grid container justify="flex-end">
                         <Grid item>
-                            <Link href="/login" variant="body2">
+                            <Link href="/login" variant="body2" color="inherit">
                                 Already have an account? Sign In
                             </Link>
                         </Grid>

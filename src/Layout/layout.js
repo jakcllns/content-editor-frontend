@@ -18,12 +18,12 @@ const Layout = props => {
                         <TopDrawer
                             isAuthenticated={props.isAuth}
                             onSignOut={props.handleSignOut}
-                            onLogin={props.handleLogin}
+                            authToken={props.authToken}
                         /> :
                         <NavBar
                             isAuthenticated={props.isAuth}
                             onSignOut={props.handleSignOut}
-                            onLogin={props.handleLogin}
+                            authToken={props.authToken}
                         />
                     }
                 </header>

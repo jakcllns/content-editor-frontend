@@ -1,29 +1,24 @@
 import Layout from  "./Layout/Layout";
-import { useState } from 'react';
+import { useContext } from 'react';
 import Signup from './Pages/Signup/Signup';
+import Login from './Pages/Login/Login';
 import { Route, Switch } from 'react-router-dom';
+import { AuthContext } from './context/auth-context';
 
 function App() {
-  const [isAuth, setIsAuth] = useState(false);
-  
-  const handleSignOut = event => {
-    //Add clean up code for once routing is added
-    setIsAuth(false);
-  }
-  
-  const handleLogin = event => {
-    //Authentication code once we start adding the backend in
-    setIsAuth(true);
-  }
+  const authContext = useContext(AuthContext);
 
   return (
-    <Layout
-      isAuth={isAuth}
-      handleLogin={handleLogin}
-      handleSignOut={handleSignOut}
+    <Layout 
+      isAuth={authContext.jwt}
+      handleSignOut={authContext.signout}
+      authToken={authContext.jwt}
+
     > 
       <Switch>
         <Route path="/signup" exact component={Signup} />
+        <Route path="/login" exact render={props => <Login  />} />
+        <Route path="/" render={()=> console.log(authContext)}/>
       </Switch>
     </Layout>
   );

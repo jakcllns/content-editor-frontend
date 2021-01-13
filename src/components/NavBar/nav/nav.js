@@ -7,6 +7,7 @@ import {
     makeStyles
 } from "@material-ui/core"
 
+import {Link as RouterLink} from  'react-router-dom';
 import AccountCircle from "@material-ui/icons/AccountCircle";
 import { useState } from "react";
 
@@ -26,7 +27,7 @@ const useStyles = makeStyles(theme => ({
 
 const Nav = props => {
     const classes = useStyles();
-    const auth = props.isAuthenticated;
+    const auth = props.authToken;
     const [state, setState] = useState({
         open: false,
         anchorElement: null
@@ -52,27 +53,33 @@ const Nav = props => {
         <nav>
             <Link 
                 variant="button" 
-                color="inherit" href="/" 
+                color="inherit" 
                 className={props.isMobile ? classes.blockLink : classes.link}
+                component={RouterLink}
+                to="/"
             >
                 Home
             </Link>
-            <Link 
+            <Link
+                component={RouterLink} 
                 variant="button" 
                 color="inherit" 
-                href="/about" 
+                to="/about" 
                 className={props.isMobile ? classes.blockLink : classes.link}
             >
                 About Us
             </Link>
-            <Button 
-                variant="contained"
-                href="/signup"
-                color="secondary"
-                className={props.isMobile ? classes.blockLink : ''}
-            >
-                Sign Up
-            </Button>
+            { !auth &&
+                <Button 
+                    component={RouterLink}
+                    variant="contained"
+                    to="/signup"
+                    color="secondary"
+                    className={props.isMobile ? classes.blockLink : ''}
+                >
+                    Sign Up
+                </Button>
+            }
             <IconButton
                 aria-label="current user account"
                 aria-controls="menu-appbar"
@@ -105,13 +112,17 @@ const Nav = props => {
                     >
                         <MenuItem>Profile</MenuItem>
                         <MenuItem>My Posts</MenuItem>
-                        <MenuItem component="button" onClick={props.onSignOut} >Sign Out</MenuItem>
+                        <MenuItem component="button" onClick={props.onSignOut} >
+                            Sign Out
+                        </MenuItem>
                     </Menu>
                 )}
                 {!auth && (
                     <Menu
-                        id="menu-appbar"
-                        anchorEl={state.anchorElement}
+                        getContentAnchorEl={null}
+                        id="menu-appbar"                        
+                        elevation={0}
+                        onClose={handleClose}
                         anchorOrigin={{
                             vertical: 'bottom',
                             horizontal: 'center'
@@ -120,11 +131,14 @@ const Nav = props => {
                             vertical: 'top',
                             horizontal: 'center'
                         }}
-                        getContentAnchorEl={null}
+                        anchorEl={state.anchorElement}
                         open={state.open}
-                        onClose={handleClose}
                     >
-                        <MenuItem component="button" onClick={props.onLogin}>Login</MenuItem>
+                        <MenuItem component="button" >
+                            <Link component={RouterLink} to="/login"  color="inherit">
+                                Login
+                            </Link>
+                        </MenuItem>
                     </Menu>
                 )}
         </nav>

@@ -105,6 +105,7 @@ const TopDrawer = props => {
                     onSignOut={props.onSignOut}
                     onLogin={props.onLogin}
                     isMobile={true}
+                    authToken={props.authToken}
                 />
             </Drawer>
         </nav>
