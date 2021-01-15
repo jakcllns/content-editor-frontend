@@ -11,7 +11,7 @@ import {
 } from "@material-ui/core";
 import { useState, useContext } from "react";
 import { LockOutlined } from "@material-ui/icons";
-import { AuthContext } from '../context/auth-context';
+import { useAuth } from '../hooks/useAuth';
 
 const useStyles = makeStyles(theme => ({
     paper: {
@@ -51,7 +51,7 @@ const useStyles = makeStyles(theme => ({
 }));
 
 const LoginForm = props => {
-    const authContext = useContext(AuthContext);
+    const authContext = useAuth();
     const classes = useStyles();
     const [buttonEnabled, setButtonEnabled] = useState(false);
     const [formData, setFormData] = useState({
@@ -59,10 +59,10 @@ const LoginForm = props => {
         password: null,
         rememberMe: false
     });
+    const [error, setError] = useState();
     const [loading, setLoading] = useState(false);
 
     const handleChange = event => {
-        // event.preventDefault();
         const { name, value, checked } = event.target;
 
         const newFormData = {...formData};
@@ -77,64 +77,22 @@ const LoginForm = props => {
 
     };
 
-    const handleSubmit = event => {
+    const handleSubmit = async event => {
         event.preventDefault();
         setLoading(true);
-        
+        setError(null);
 
-        const graphqlQuery = {
-            query: `
-                query LogIn(
-                    $email: String!,
-                    $password: String!
-                ){
-                    login(userLoginData:{
-                        email: $email,
-                        password: $password
-                    }){
-                        userId
-                        token
-                        expiresIn
-                    }
-                }
-            `,
-            variables: {
-                email: formData.email,
-                password: formData.password
-            }
+        const result = await authContext.login(formData.email, formData.password);
+
+        setLoading(false);
+
+        console.log(result);
+        
+        if(result){
+            return props.history.goBack()    
         }
 
-        fetch(
-            "http://localhost:8000/user", {
-                method: 'POST',
-                body: JSON.stringify(graphqlQuery),
-                headers: {
-                    'Content-Type': 'application/json'
-                }
-        })
-            .then( res => {
-                return res.json();
-            })
-            .then(resData => {
-                if(resData.errors){
-                    const error = new Error(resData.errors.map(e => {
-                        return e.message
-                    }).join('|'));
-                    error.origin = 'server';
-                    throw error;
-                }
-
-                ;
-
-                setLoading(false);
-                console.log(resData);
-                authContext.login(resData.data.login.token, resData.data.login.expiresIn);
-                props.history.goBack();
-            
-            }).catch(err => {
-                setLoading(false);
-                console.log(err);
-            })
+        setError('Invaliad email or password');
     }
 
     return(
@@ -151,6 +109,11 @@ const LoginForm = props => {
                 onChange={handleChange}
             >
                 <Grid container spacing={2}>
+                    <Grid item xs={12}>
+                        <Typography component="h5" color="error" align="center">
+                            {error}
+                        </Typography>
+                    </Grid>
                     <Grid item xs={12}>
                         <TextField
                             color="secondary"
