@@ -8,7 +8,7 @@ const authContext = createContext({
     error: null,
     login: (email, password) => {},
     signout: () => {},
-    signup: (email, password) => {},
+    signup: (formData) => {},
 });
 
 export const ProvideAuth = ({children}) => {
@@ -79,8 +79,40 @@ const useProvideAuth = () => {
         setExpiry(null);
     };
 
-    const signup = () => {
-        
+    const signup = (formData) => {
+        const graphqlQuery = {
+            query: `
+                mutation SignUp($firstName: String!, $lastName: String!, $email: String!, $password: String!, $twoFactor: Boolean!){
+                    signup(userSignUpData: {firstName: $firstName, lastName: $lastName, email: $email, password: $password, twoFactor: $twoFactor}){
+                        _id
+                        email
+                        twoFactor
+                    }
+                }
+            `,
+            variables: {
+                firstName: formData.firstName,
+                lastName: formData.lastName,
+                email: formData.email,
+                password: formData.password,
+                twoFactor: formData.twoFactor
+            }
+        }
+        return userApi(graphqlQuery)
+            .then(res => res.json())
+            .then(resData => {
+                if(resData.errors) {
+                    const error = new Error(resData.errors.map(e => {
+                        return e.message;
+                    }).join('|'));
+                    throw error;
+                }
+                return true;
+            })
+            .catch(err => {
+                setError(err);
+                return false;
+            });
     }
 
     return {
