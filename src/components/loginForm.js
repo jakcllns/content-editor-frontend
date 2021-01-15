@@ -9,7 +9,7 @@ import {
     CircularProgress,
     Checkbox
 } from "@material-ui/core";
-import { useState, useContext } from "react";
+import { useState } from "react";
 import { LockOutlined } from "@material-ui/icons";
 import { useAuth } from '../hooks/useAuth';
 

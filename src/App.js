@@ -1,5 +1,4 @@
 import Layout from  "./Layout/Layout";
-import { useContext } from 'react';
 import Signup from './Pages/Signup/Signup';
 import Login from './Pages/Login/Login';
 import { Route, Switch } from 'react-router-dom';
