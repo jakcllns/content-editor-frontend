@@ -109,10 +109,6 @@ const useProvideAuth = () => {
                 }
                 return true;
             })
-            .catch(err => {
-                setError(err);
-                return false;
-            });
     }
 
     return {
