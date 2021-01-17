@@ -7,7 +7,8 @@ export const userApi = (graphqlQuery) => {
             body: JSON.stringify(graphqlQuery),
             headers: {
                 'Content-Type': 'application/json'
-            }
+            },
+            credentials: 'include'
         }
     );
 };

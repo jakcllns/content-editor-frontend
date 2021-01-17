@@ -92,7 +92,7 @@ const LoginForm = props => {
             return props.history.goBack()    
         }
 
-        setError('Invaliad email or password');
+        setError('Invalid email or password');
     }
 
     return(
