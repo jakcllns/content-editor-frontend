@@ -1,5 +1,5 @@
-import React, { useState, useContext, createContext } from 'react';
-import { userApi } from '../api/api-client';
+import React, { useState, useContext, createContext, useCallback } from 'react';
+import { userApi, refreshTokenApi } from '../api/api-client';
 
 const authContext = createContext({
     user: null,
@@ -9,10 +9,34 @@ const authContext = createContext({
     login: (email, password) => {},
     signout: () => {},
     signup: (formData) => {},
+    refreshToken: ()=>{},
 });
 
 export const ProvideAuth = ({children}) => {
     const auth = useProvideAuth();
+    const [timer, setTimer] = useState(null);
+    const [checked, setCheck] = useState(false);
+
+    const executeRefresh = useCallback(() => {
+        timer && clearTimeout(timer);
+        timer && setTimer(null);
+        auth.refreshToken()
+    },[auth, timer]);
+
+    const checkForRefresh = useCallback(() => {
+        setCheck(true);
+        auth.refreshToken();
+    },[auth]);
+      
+    if(!checked){
+        checkForRefresh();
+    }
+    
+    if(auth.jwt && auth.expiry && !timer) {
+        console.log('seting timeout');
+        setTimer(setTimeout(executeRefresh, auth.expiry));
+    }
+
     return <authContext.Provider value={auth}>{children}</authContext.Provider>;
 };
 
@@ -25,6 +49,26 @@ const useProvideAuth = () => {
     const [jwt, setJwt] = useState(null);
     const [expiry, setExpiry] = useState(null);
     const [error, setError] = useState(null);
+
+    const refreshToken = () => {
+        console.log('Refreshing token');
+        return refreshTokenApi()
+            .then(res =>{
+                return res.json();
+            })
+            .then(resData => {
+                setJwt(resData.token);
+                setExpiry(resData.expiresIn);
+                setUser(resData.userId);
+            })
+            .catch(err => {
+                setError(err);
+                setJwt(null);
+                setExpiry(null);
+                setUser(null);
+                return err;
+            });
+    }
 
     const login = (email, password) => {
         const graphqlQuery = {
@@ -64,6 +108,7 @@ const useProvideAuth = () => {
                 setUser(resData.data.login.userId);
                 setJwt(resData.data.login.token);
                 setExpiry(resData.data.login.expiresIn);
+                
                 return true;
             })
             .catch(err => {
@@ -119,5 +164,6 @@ const useProvideAuth = () => {
         login,
         signout,
         signup,
+        refreshToken,
     };
 }

@@ -12,3 +12,16 @@ export const userApi = (graphqlQuery) => {
         }
     );
 };
+
+export const refreshTokenApi = () => {
+    return fetch(
+        BASE_HOST + '/refresh-token',
+        {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          credentials: 'include'
+        }
+      );
+}
