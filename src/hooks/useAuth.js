@@ -1,5 +1,9 @@
 import React, { useState, useContext, createContext, useCallback } from 'react';
-import { userApi, refreshTokenApi } from '../api/api-client';
+import { 
+    userApi,
+    refreshTokenApi,
+    signoutApi,
+ } from '../api/api-client';
 
 const authContext = createContext({
     user: null,
@@ -119,9 +123,21 @@ const useProvideAuth = () => {
     }
 
     const signout = () => {
-        setUser(null);
-        setJwt(null);
-        setExpiry(null);
+        signoutApi()
+            .then(res => {
+                return res.json();
+            })
+            .then(resData => {
+                setUser(null);
+                setJwt(null);
+                setExpiry(null);
+                return resData
+            })
+            .catch(err => {
+                console.log(err);
+            });
+
+
     };
 
     const signup = (formData) => {

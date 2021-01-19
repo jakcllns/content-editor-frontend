@@ -25,3 +25,16 @@ export const refreshTokenApi = () => {
         }
       );
 }
+
+export const signoutApi = () => {
+    return fetch(
+        BASE_HOST + '/refresh-token/signout',
+        {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            credentials: 'include',
+        }
+    );
+};
