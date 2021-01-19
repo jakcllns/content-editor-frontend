@@ -1,25 +1,24 @@
 import Layout from  "./Layout/Layout";
-import { useContext } from 'react';
 import Signup from './Pages/Signup/Signup';
 import Login from './Pages/Login/Login';
 import { Route, Switch } from 'react-router-dom';
-import { AuthContext } from './context/auth-context';
-
+import { useAuth } from './hooks/useAuth';
+import { Button } from "@material-ui/core";
+ 
 function App() {
-  const authContext = useContext(AuthContext);
+  const authContext = useAuth();
 
-  
   return (
     <Layout 
-      isAuth={authContext.jwt}
+      isAuth={authContext.jwt ? true : false}
       handleSignOut={authContext.signout}
       authToken={authContext.jwt}
-
+      
     > 
       <Switch>
         <Route path="/signup" exact component={Signup} />
         <Route path="/login" exact render={props => <Login  />} />
-        <Route path="/" render={()=> console.log(authContext)}/>
+        <Route path="/" render={props => <h1>Home</h1>}/>
       </Switch>
     </Layout>
   );

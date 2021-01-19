@@ -13,6 +13,7 @@ import {
 } from  "@material-ui/core"
 import { LockOutlined } from "@material-ui/icons";
 import { useState } from "react";
+import { useAuth } from '../../hooks/useAuth';
 
 const useStyles = makeStyles(theme => ({
     paper: {
@@ -67,7 +68,7 @@ const Signup = props => {
         twoFactor: false
     });
     const [loading, setLoading] = useState(false);
-
+    const { signup } = useAuth();
 
     const handleChange = event => {
         // event.preventDefault();
@@ -112,59 +113,25 @@ const Signup = props => {
             if(error.message.length > 0){
             return catchError(error);
             }
-            setError([...errors.filter(e => e.origin !== name)]);
+            setError([...errors.filter(e => e.origin !== name && e.origin !== 'server')]);
         }
 
     const handleSubmit = event => {
         event.preventDefault();
         setLoading(true);
 
-        const graphqlQuery = {
-            query: `
-                mutation SignUp($firstName: String!, $lastName: String!, $email: String!, $password: String!, $twoFactor: Boolean!){
-                    signup(userSignUpData: {firstName: $firstName, lastName: $lastName, email: $email, password: $password, twoFactor: $twoFactor}){
-                        _id
-                        email
-                        twoFactor
-                    }
-                }
-            `,
-            variables: {
-                firstName: formData.firstName,
-                lastName: formData.lastName,
-                email: formData.email,
-                password: formData.password,
-                twoFactor: formData.twoFactor
-            }
-        }
-
-        fetch(
-            "http://localhost:8000/user", {
-                method: 'POST',
-                body: JSON.stringify(graphqlQuery),
-                headers: {
-                    'Content-Type': 'application/json'
-                }
-        })
-            .then( res => {
-                return res.json();
+        signup(formData)
+            .then(result => {
+                setLoading(false);
+                props.history.push("/login");
             })
-            .then(resData => {
-                if(resData.errors){
-                    const error = new Error(resData.errors.map(e => {
-                        return e.message
-                    }).join('|'));
-                    error.origin = 'server'
-                    throw error;
-                }
-                props.history.push("/");
-            })
-            .catch(err => {
+            .catch(err =>{
+                setLoading(false);
                 if(!err.origin){
                     err.origin = 'server'
                 }
                 catchError(err);
-            }); 
+            });
     };
 
     const catchError = error => {
@@ -279,7 +246,7 @@ const Signup = props => {
                         variant="contained"
                         className={classes.submit}
                         fullWidth
-                        disabled={errors.some(e => e.origin !== 'server') || loading}
+                        disabled={errors.some(e => e.message !== '') || loading}
                     >
                         Sign Up
                         {

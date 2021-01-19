@@ -4,7 +4,7 @@ import './index.css';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
 import { BrowserRouter } from 'react-router-dom';
-import AuthContextProvider from  './context/auth-context';
+import { ProvideAuth as AuthContextProvider } from './hooks/useAuth';
 
 
 ReactDOM.render(
