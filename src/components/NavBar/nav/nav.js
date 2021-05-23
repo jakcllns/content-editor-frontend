@@ -113,7 +113,15 @@ const Nav = props => {
                         keepMounted
                         open={state.open}
                     >
-                        <MenuItem>Profile</MenuItem>
+                        <MenuItem>
+                            <Link 
+                                component={RouterLink}
+                                to="/profile"
+                                color="inherit"
+                            >
+                                Profile
+                            </Link>                        
+                        </MenuItem>
                         <MenuItem>My Posts</MenuItem>
                         <MenuItem component="button" onClick={props.onSignOut} >
                             Sign Out
