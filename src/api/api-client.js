@@ -38,3 +38,18 @@ export const signoutApi = () => {
         }
     );
 };
+
+export const profileApi = (graphqlQuery, token) => {
+    return fetch(
+        BASE_HOST + '/profile',
+        {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': token
+            },
+            credentials: 'include',
+            body: JSON.stringify(graphqlQuery),
+        }
+    )
+}
