@@ -70,7 +70,7 @@ const Profile = props => {
                 className={classes.card}
             >
                 <Grid container spacing={3} alignContent="center">
-                    <Grid item xs={12} spacing={2} alignItems="center">
+                    <Grid item xs={12} alignItems="center">
                         <Typography component="h5" align="left" variant="h5" spacing={3}>
                             Name: {profileData && profileData.firstName + ' ' + profileData.lastName}
                         </Typography>

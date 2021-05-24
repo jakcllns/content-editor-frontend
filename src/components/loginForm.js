@@ -12,6 +12,7 @@ import {
 import { useState } from "react";
 import { LockOutlined } from "@material-ui/icons";
 import { useAuth } from '../hooks/useAuth';
+import { useHistory } from "react-router-dom";
 
 const useStyles = makeStyles(theme => ({
     paper: {
@@ -62,6 +63,8 @@ const LoginForm = props => {
     const [error, setError] = useState();
     const [loading, setLoading] = useState(false);
 
+    const history = useHistory();
+
     const handleChange = event => {
         const { name, value, checked } = event.target;
 
@@ -89,7 +92,8 @@ const LoginForm = props => {
         console.log(result);
         
         if(result){
-            return props.history.goBack()    
+            console.log(history);
+            return history.location.state ? history.push(history.location.state.from) : history.goBack()   
         }
 
         setError('Invalid email or password');

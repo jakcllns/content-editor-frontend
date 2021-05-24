@@ -24,6 +24,10 @@ function App() {
         </Fragment>
       )
     }
+    return <Redirect to={{
+      pathname: '/login',
+      state: { from: window.location.pathname }
+    }}/>
 
   }
   return (

@@ -12,4 +12,4 @@ const NewPost = props => {
         
 }
 
-export default NewPost;
+export default withRouter(NewPost);
