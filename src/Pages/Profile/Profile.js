@@ -2,6 +2,7 @@ import { Paper, makeStyles, Grid, Typography } from '@material-ui/core';
 import { useAuth } from '../../hooks/useAuth';
 import { profileApi } from '../../api/api-client';
 import { useState, useEffect } from 'react';
+import { withRouter } from 'react-router-dom';
 
 const useStyles = makeStyles(theme => ({
     card: {
@@ -90,4 +91,4 @@ const Profile = props => {
     )
 };
 
-export default Profile;
+export default withRouter(Profile);

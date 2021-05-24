@@ -5,6 +5,7 @@ import { Route, Switch } from 'react-router-dom';
 import { useAuth } from './hooks/useAuth';
 import Profile from "./Pages/Profile/Profile";
 import PrivateRoute from "./components/PrivateRoute/PrivateRoute";
+import NewPost from "./Pages/NewPost/NewPost";
 
 function App() {
   const authContext = useAuth();
@@ -16,13 +17,22 @@ function App() {
       authToken={authContext.jwt}
       
     > 
+    
       <Switch>
+        {/* Public routes */}
         <Route path="/signup" exact component={Signup} />
         <Route path="/login" exact render={props => <Login  />} />
-        <PrivateRoute path="/profile" exact>
+        <Route path="/" render={props => <h1>Home</h1>} exact/>
+
+        {/* Private routes */}
+        <PrivateRoute path="/profile" >
           <Profile />
         </PrivateRoute>
-        <Route path="/" render={props => <h1>Home</h1>}/>
+        <PrivateRoute path="/new" exact>
+            <NewPost />
+        </PrivateRoute>
+        
+        
       </Switch>
     </Layout>
   );

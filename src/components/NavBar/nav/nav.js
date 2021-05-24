@@ -123,6 +123,15 @@ const Nav = props => {
                             </Link>                        
                         </MenuItem>
                         <MenuItem>My Posts</MenuItem>
+                        <MenuItem>
+                            <Link
+                                component={RouterLink}
+                                to="/new"
+                                color="inherit"
+                            >
+                                New Post
+                            </Link>
+                        </MenuItem>
                         <MenuItem component="button" onClick={props.onSignOut} >
                             Sign Out
                         </MenuItem>
