@@ -1,15 +1,31 @@
 import Layout from  "./Layout/layout";
 import Signup from './Pages/Signup/Signup';
 import Login from './Pages/Login/Login';
-import { Route, Switch } from 'react-router-dom';
+import { Route, Switch, Redirect } from 'react-router-dom';
 import { useAuth } from './hooks/useAuth';
 import Profile from "./Pages/Profile/Profile";
-import PrivateRoute from "./components/PrivateRoute/PrivateRoute";
+// import PrivateRoute from "./components/PrivateRoute/PrivateRoute";
 import NewPost from "./Pages/NewPost/NewPost";
+import { Fragment } from 'react';
 
 function App() {
   const authContext = useAuth();
 
+  const renderPrivateRoutes = (auth) => {
+    if(auth.jwt){
+      return (
+        <Fragment>
+          <Route path="/profile" exact>
+            <Profile />
+          </Route>
+          <Route path="/new" exact>
+            <NewPost />
+          </Route>
+        </Fragment>
+      )
+    }
+
+  }
   return (
     <Layout 
       isAuth={authContext.jwt ? true : false}
@@ -25,17 +41,14 @@ function App() {
         <Route path="/" render={props => <h1>Home</h1>} exact/>
 
         {/* Private routes */}
-        <PrivateRoute path="/profile" >
-          <Profile />
-        </PrivateRoute>
-        <PrivateRoute path="/new" exact>
-            <NewPost />
-        </PrivateRoute>
-        
+
+        {renderPrivateRoutes(authContext)}
         
       </Switch>
     </Layout>
   );
 }
+
+
 
 export default App;
