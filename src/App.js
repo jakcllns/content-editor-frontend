@@ -1,4 +1,4 @@
-import Layout from  "./Layout/Layout";
+import Layout from  "./Layout/layout";
 import Signup from './Pages/Signup/Signup';
 import Login from './Pages/Login/Login';
 import { Route, Switch } from 'react-router-dom';
